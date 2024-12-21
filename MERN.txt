@@ -1,0 +1,244 @@
+Required Comands
+
+1. Create App -> Npx create-react-app frontend
+2. Import bootstrap  -> npm i react-bootstrap bootstrap react-icons
+3. In the index.js file ->  
+	
+	import "bootstrap/dist/css/bootstrap.min.css"
+4. npm start
+5. npm i react-router-bootstrap
+6. npm i react-router-dom
+7. npm i express
+8. npm init
+9. npm i axios
+
+
+
+<header>
+<Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect> 
+<Container>
+<Navbar.Brand href="/">ProShop</Navbar.Brand>
+</Container>
+</Navbar>
+</header>
+The <Navbar> Means: 
+Has a dark background color (bg="dark").
+Uses a dark color scheme for its elements (variant="dark").
+Stays expanded on larger screens (expand="lg").
+Automatically collapses after a link is selected (collapseOnSelect).
+
+Container is used so that the conponents inside the navbar donot expand to the edges
+<Navbar.Brand>  is used to specify the logo or etc.
+
+
+
+
+
+
+======================================================================
+Router:
+
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route index={true} path="/" element={<HomeScreen />} />
+    </Route>
+  )
+);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
+
+
+We use Outlet in the app.js as we have defined routers in the index.js
+Insted of using <a> tag, we use Link tag because it donot reloads the page. And instead of href we use to  -> i.e <Link to=""/>
+
+In the <Nav.Link> and <Navbar.Brand> we have href bur we cannot replace it with the to, use we use LinkContainer which has a to and put the Nav.Link inside the LinkContainer
+
+we use ellipses for making the data in a single line. text-overflow
+
+import {useParams} from "react-router-dom"  -> this is used to get id from the url
+
+
+
+
+FULL STACK WORKFLOW:
+--------------------
+
+		GET
+		POST
+		PUT
+		DELETE        /api/products  HTTP REQUEST                    MONGOOSE QUERY     
+CLIENT<========================> REST api<========================> SERVER-------------------> MONGO db
+	   RESPONSE/DATA                     HTTP RESPONSE
+REACT                         AUTH MIDDLEWARE                   NODE EXPRESS
+
+
+
+BACKEND:
+========
+npm init
+
+by running the above comand we get a package.json file and provide the details
+{
+  "name": "proshop",
+  "version": "1.0.0",
+  "description": "eCommerce Application built with the MERN stack",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "author": "Swaroop S",
+  "license": "MIT"
+}
+
+We change the test to start and add "type": "module", so that we can use import statements
+
+app.get("/", (req, res) => res.send(`API is running on port : ${port}`));
+here, the get funxtion takes 2 parameters, that is the url and an arrow function. The arraow function has 2 parameters, the request and response. the res.send() is used the message.
+
+app.listen(port, () => console.log("Server is running"));
+this is used to run the file. listen() takes in 2 parameters, the port number and the function/.
+
+npm i -D nodemon concurrently     -> Here -D refers to deployment (dev dependancy) that means we donot need it in production.
+
+Then, we add this -> "server": "nodemon backend/server.js" in the scripts of package.json
+the script looks like this:
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+
+here we define at what name what shoud be run, for example, if i give npm run server, it runs the server using the nodemon and goes to backend/server.js
+
+the last dev line is to run both the frontend and backend concurrently.  the \ is used to neglect " or as a escape character.
+
+
+
+npm i -D dotenv  -> this is used to define environment variable
+
+
+then we define a .env file where all the environment variables are kept.
+to use this first we import dotenv from "dotenv";
+then execute this before using the contents from the .env file->dotenv.config();
+
+to use the contents prefix the variable name with process.env  i.e const port = process.env.PORT;
+
+
+npm i axios   -> this is used to fetch the data. We can use fetch api also but axios is more recomended.
+in the development stage, we use proxy -> "proxy": "http://localhost:5000" so that we no need to type it completely.
+
+useEffect is used to ren a function when the dependancy value is changed. it takes 2 values, 1 the function and the 2nd is the dependancy array or value. If we want the function to run when we open the file / run when the website is loaded at first, we leave it empty array.
+
+we use bcryptjs for hashing of password.
+to install the bcrypt, npm i bcryptjs 
+
+
+======================================================
+POSTMAN:
+----------
+1. we create a new workspace,
+2. we create a new environment to store environment variables, give the initial value, remember to save.
+3. we create an api, give it a name
+4. we create a collection to store every request i.e if we make any request, we want it in a collection. So we are creating 3 collections, users, orders, and products.
+  -> Here, we create a collection for product, click on 3 dot in the name of collection, select add request.
+  -> to use a variable, we use double braces {{baseURL}}
+  -> to get the details we use GET, then {{baseURL}}/products, we get the products. then clisk save.
+
+
+
+==============================================================================================================
+REDUX TOOLKIT
+-----------------------------------------------------------------
+
+come into frontend,
+install reduxtoolkit:
+npm i @reduxjs/toolkit react-redux   -> redux toolkit and react redux should be seen in package.json
+
+1. Store->  it holds the reduces where changes in the state takes place.
+2. UI-> the changes made in the stare is reflected ion the UI. Here the state is rendered in the UI
+3. Event Handler-> The UI must call the dispatch(in the event handler) for every change. Dispatch is an action or an event. This helps in the updation of the state in the store.
+
+in redux toolkit, first we create a store, then insted of creating just a reducer, we create a slice(the slice creates a reduces and then also creates a respective action creater.)
+
+
+Here we use 2 Hooks:
+1. useSelector: read a state.
+
+2. useDispatch:  dispatch a action
+
+
+const initialState = localStorage.getItem("cart")
+  ? JSON.parse(localStorage.getItem("cart"))
+  : { cartItems: [] };
+Here's a breakdown of the code and its functionality:
+
+1. Retrieving Data from Local Storage:
+
+const initialState = localStorage.getItem("cart")
+It attempts to fetch a value associated with the key "cart" from the browser's local storage.
+If found, it retrieves a stringified JSON representation of the saved cart data.
+If not found, it returns null.
+2. Conditional Initial State Handling:
+
+? JSON.parse(localStorage.getItem("cart"))
+If the previous step yielded a value (meaning a saved cart exists), it parses the retrieved string back into a JavaScript object using JSON.parse(). This object presumably contains cart item details.
+3. Default State:
+
+: { cartItems: [] }
+If no saved cart was found in local storage, this default state is assigned to initialState. It's an object with a single property: cartItems set to an empty array, indicating an empty cart.
+Summary:
+
+The code establishes the initial state for a cart-related feature, prioritizing data persistence.
+It first checks for existing cart data in local storage.
+If found, it utilizes the saved data to initialize the state.
+If not found, it starts with an empty cart state.
+
+to create a backend file.(once the middleware and the models are created)
+Steps:
+1. we create a controller and a Route file.
+2. we create the controller file using the Model
+3. using the controller, we create the route file
+4. then we update the server.js file
+
+
+
+To change/upload image in the website, we use Multer. Follow the steps to install and use:
+1. install Multer in the backend / the root directory: npm i multer
+2. Create a new route. And a folder to place the uploaded image.
+3. go to server.js and bring in  the route. and make the folder static.
+
+
+to create frontend:
+1. check for constants fie for url.
+2. we create a slice.
+3. Create a front end: a) we import it
+			b) we extract the required information: const [uploadImage, {isLoading: LoadingImage] = useUploadProductImageMutation();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Github link to CodePipeline
